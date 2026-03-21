@@ -66,7 +66,7 @@ async def mobile_dashboard():
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-@keyframes glow {0%,100%{text-shadow:0 0 20px #10b981;}50%{text-shadow:0 0 40px #10b981;}}
+css_keyframes = "@keyframes glow {0%,100%{text-shadow:0 0 20px #10b981;}50%{text-shadow:0 0 40px #10b981;}}"
 .glow{text-shadow:0 0 20px #10b981;animation:glow 2s infinite;}
 </style>
 </head>
@@ -281,7 +281,7 @@ async def live_dashboard():
 <style>
 body{background:#000;color:#0f0;font-family:monospace;padding:50px;text-align:center;}
 css_code = ".logo{font-size:3em;text-shadow:0 0 20px green;animation:glow 2s infinite;}"
-@keyframes glow{0%,100%{text-shadow:0 0 20px green;}50%{text-shadow:0 0 40px green;}}
+css_keyframes = "@keyframes glow{0%,100%{text-shadow:0 0 20px green;}50%{text-shadow:0 0 40px green;}}"
 .price{font-size:4em;margin:20px;}
 </style>
 </head>
