@@ -27,6 +27,82 @@ app = FastAPI(
 @app.get("/")
 async def root():
     return {"message": "🚀 Comet AI Trading LIVE!", "status": "success"}
+    @app.get("/mobile-dashboard")
+async def mobile_dashboard():
+    return HTMLResponse('''
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Comet AI Trading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#000000">
+</head>
+<body class="bg-black text-green-400 min-h-screen flex flex-col">
+    <!-- Header -->
+    <div class="bg-gray-900 p-4 border-b-4 border-green-500">
+        <div class="text-center">
+            <div class="text-2xl font-bold mb-2">☄️ COMET AI</div>
+            <div class="text-lg opacity-75">AI Trading Dashboard</div>
+        </div>
+    </div>
+
+    <!-- Prices -->
+    <div class="flex-1 p-6 space-y-6">
+        <div id="prices" class="grid grid-cols-2 gap-4 text-center">
+            <div class="bg-gray-900 p-6 rounded-xl border-2 border-green-400">
+                <div class="text-sm opacity-75 mb-2">BTC/USDT</div>
+                <div id="btc-price" class="text-3xl font-bold">$65,234</div>
+            </div>
+            <div class="bg-gray-900 p-6 rounded-xl border-2 border-green-400">
+                <div class="text-sm opacity-75 mb-2">ETH/USDT</div>
+                <div id="eth-price" class="text-3xl font-bold">$3,487</div>
+            </div>
+        </div>
+
+        <!-- Wallet -->
+        <div class="bg-gradient-to-r from-green-900/50 to-black p-6 rounded-2xl border border-green-500">
+            <div class="text-sm opacity-75 mb-3">💰 TOTAL PORTFOLIO</div>
+            <div class="text-4xl font-bold">$1,192,774</div>
+            <div class="text-sm opacity-75 mt-2">+5.2% (1yr compound)</div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-2 gap-4">
+            <button onclick="buyBTC()" class="bg-green-500 hover:bg-green-600 text-black font-bold py-4 px-6 rounded-xl text-lg">BUY BTC</button>
+            <button onclick="buyETH()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-xl text-lg">BUY ETH</button>
+        </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="bg-gray-900 p-4 border-t-4 border-green-500 grid grid-cols-3 gap-4">
+        <button class="p-2"><span class="text-xl">📊</span></button>
+        <button class="p-2"><span class="text-xl">💼</span></button>
+        <button class="p-2"><span class="text-xl">⚙️</span></button>
+    </div>
+
+    <script>
+        // Live price updates
+        setInterval(async () => {
+            const res = await fetch('/prices');
+            const data = await res.json();
+            document.getElementById('btc-price').textContent = `$${data.BTC_USDT.toLocaleString()}`;
+            document.getElementById('eth-price').textContent = `$${data.ETH_USDT.toLocaleString()}`;
+        }, 2000);
+
+        function buyBTC() { alert('🚀 BTC Buy Order Placed!'); }
+        function buyETH() { alert('🚀 ETH Buy Order Placed!'); }
+
+        // PWA Install
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            deferredPrompt = e;
+        });
+    </script>
+</body>
+</html>''')
 
 # 🔥 CORS + PRODUCTION READY
 app.add_middleware(
