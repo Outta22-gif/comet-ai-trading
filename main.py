@@ -43,14 +43,36 @@ async def prices():
 async def mobile_dashboard():
     return HTMLResponse("""
 <!DOCTYPE html>
-<html><head><meta name="viewport" content="width=device-width"><script src="https://cdn.tailwindcss.com"></script><title>🚀 Comet AI</title></head>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@keyframes glow {0%,100%{text-shadow:0 0 20px #10b981;}50%{text-shadow:0 0 40px #10b981;}}
+.glow{text-shadow:0 0 20px #10b981;animation:glow 2s infinite;}
+</style>
+</head>
 <body class="bg-black text-green-400 p-8 text-center min-h-screen">
-<h1 class="text-4xl font-bold mb-8"> COMET AI</h1>
-<div id="btc" class="text-3xl mb-4">BTC: Loading...</div>
-<div id="eth" class="text-3xl mb-8">ETH: Loading...</div>
-<button onclick="buyBTC()" class="bg-green-500 text-black px-8 py-4 rounded-full text-xl font-bold">BUY BTC</button>
-<script>setInterval(async()=>{const res=await fetch('/prices');const data=await res.json();document.getElementById('btc').textContent=`BTC: $${data.BTC_USDT.toLocaleString()}`;document.getElementById('eth').textContent=`ETH: $${data.ETH_USDT.toLocaleString()}`;},2000);function buyBTC(){alert('🚀 BTC Order!');}</script>
-</body></html>""")
+<div class="glow text-4xl font-bold mb-8 text-green-500">COMET AI TRADING</div>
+<div id="btc" class="text-3xl mb-4 p-4 bg-gray-900 rounded-lg border-2 border-green-400">BTC: Loading...</div>
+<div id="eth" class="text-3xl mb-8 p-4 bg-gray-900 rounded-lg border-2 border-green-400">ETH: Loading...</div>
+<button onclick="buyBTC()" class="bg-green-500 hover:bg-green-600 text-black px-8 py-4 rounded-full text-xl font-bold shadow-lg">BUY BTC</button>
+<button onclick="buyETH()" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-full text-xl font-bold shadow-lg ml-4">BUY ETH</button>
+<script>
+setInterval(async()=>{
+    try {
+        const res = await fetch('/prices');
+        const data = await res.json();
+        document.getElementById('btc').textContent = `BTC: $${data.BTC_USDT?.toLocaleString() || 'N/A'}`;
+        document.getElementById('eth').textContent = `ETH: $${data.ETH_USDT?.toLocaleString() || 'N/A'}`;
+    } catch(e) { console.log('Price update failed'); }
+}, 2000);
+function buyBTC() { alert(' BTC Buy Order Placed!'); }
+function buyETH() { alert(' ETH Buy Order Placed!'); }
+</script>
+</body>
+</html>""")
+
 """
     return HTMLResponse(content=html_content)
 
@@ -229,19 +251,22 @@ async def full_wallet(email: str):
         "compound_1yr": f"${compound_total:,.2f}"
     }
 
-#  LIVE DASHBOARD
+#  LIVE DASHBOARD - FIXED CSS
 @app.get("/live-dashboard")
 async def live_dashboard():
     return HTMLResponse("""
 <!DOCTYPE html>
 <html>
-<head><title> Comet AI Trading</title>
+<head>
+<title>Comet AI Trading</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
 body{background:#000;color:#0f0;font-family:monospace;padding:50px;text-align:center;}
-.logo{font-size:3em;text-shadow:0 0 20px #0f0;animation:glow 2s infinite;}
-@keyframes glow{0%,100%{text-shadow:0 0 20px #0f0;}50%{text-shadow:0 0 40px #0f0;}}
+.logo{font-size:3em;text-shadow:0 0 20px green;animation:glow 2s infinite;}
+@keyframes glow{0%,100%{text-shadow:0 0 20px green;}50%{text-shadow:0 0 40px green;}}
 .price{font-size:4em;margin:20px;}
-</style></head>
+</style>
+</head>
 <body>
 <div class="logo"> COMET AI TRADING</div>
 <div class="price" id="btc">BTC: Loading...</div>
