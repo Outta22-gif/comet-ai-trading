@@ -9,6 +9,24 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
 import uvicorn
+from fastapi.staticfiles import StaticFiles
+
+# 🔥 ADD THIS GLOBAL VARIABLE (Line 15 အနားမှာ)
+current_prices = {
+    "BTC_USDT": 65234.56,
+    "ETH_USDT": 3487.23
+}
+
+# Update prices every 30 seconds
+async def update_prices():
+    while True:
+        try:
+            # Real Binance API call here later
+            current_prices["BTC_USDT"] = 65234.56 + (hash(asyncio.get_event_loop().time()) % 1000)
+            current_prices["ETH_USDT"] = 3487.23 + (hash(asyncio.get_event_loop().time()) % 100)
+        except:
+            pass
+        await asyncio.sleep(30)
 
 #  RAILWAY PORT FIX
 PORT = int(os.getenv("PORT", 8000))
