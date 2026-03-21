@@ -11,7 +11,7 @@ from typing import Optional
 import uvicorn
 from fastapi.staticfiles import StaticFiles
 
-# 🔥 ADD THIS GLOBAL VARIABLE (Line 15 အနားမှာ)
+#  ADD THIS GLOBAL VARIABLE (Line 15 အနားမှာ)
 current_prices = {
     "BTC_USDT": 65234.56,
     "ETH_USDT": 3487.23
@@ -154,7 +154,7 @@ def init_db():
     
     conn.commit()
     conn.close()
-    print("✅ ALL TABLES READY! Trading + KYC + Deposits")
+    print(" ALL TABLES READY! Trading + KYC + Deposits")
 
 #  USER SYSTEM
 @app.post("/register")
@@ -282,7 +282,7 @@ async def live_dashboard():
 body{background:#000;color:#0f0;font-family:monospace;padding:50px;text-align:center;}
 css_code = ".logo{font-size:3em;text-shadow:0 0 20px green;animation:glow 2s infinite;}"
 css_keyframes = "@keyframes glow{0%,100%{text-shadow:0 0 20px green;}50%{text-shadow:0 0 40px green;}}"
-.price{font-size:4em;margin:20px;}
+css_code = ".price{font-size:4em;margin:20px;}"
 </style>
 </head>
 <body>
