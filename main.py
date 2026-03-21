@@ -280,7 +280,7 @@ async def live_dashboard():
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body{background:#000;color:#0f0;font-family:monospace;padding:50px;text-align:center;}
-.logo{font-size:3em;text-shadow:0 0 20px green;animation:glow 2s infinite;}
+css_code = ".logo{font-size:3em;text-shadow:0 0 20px green;animation:glow 2s infinite;}"
 @keyframes glow{0%,100%{text-shadow:0 0 20px green;}50%{text-shadow:0 0 40px green;}}
 .price{font-size:4em;margin:20px;}
 </style>
