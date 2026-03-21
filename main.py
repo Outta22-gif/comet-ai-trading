@@ -24,6 +24,9 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc"
 )
+@app.get("/")
+async def root():
+    return {"message": "🚀 Comet AI Trading LIVE!", "status": "success"}
 
 # 🔥 CORS + PRODUCTION READY
 app.add_middleware(
