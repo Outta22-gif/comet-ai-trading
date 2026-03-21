@@ -24,35 +24,33 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc"
 )
+app.add_middleware(
+    CORSMiddleware, 
+    allow_origins=["*"], 
+    allow_credentials=True, 
+    allow_methods=["*"], 
+    allow_headers=["*"]
+)
 @app.get("/")
 async def root():
     return {"message": "🚀 Comet AI Trading LIVE!", "status": "success"}
-    @app.get("/mobile-dashboard")
+
+@app.get("/prices")
+async def prices():
+    return {"BTC_USDT": 65234.56 + random.randint(-100,100), "ETH_USDT": 3487.23 + random.randint(-50,50)}
+
+@app.get("/mobile-dashboard")
 async def mobile_dashboard():
-    html_content = """
+    return HTMLResponse("""
 <!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width">
-<script src="https://cdn.tailwindcss.com"></script>
-<title>🚀 Comet AI Trading</title>
-</head>
+<html><head><meta name="viewport" content="width=device-width"><script src="https://cdn.tailwindcss.com"></script><title>🚀 Comet AI</title></head>
 <body class="bg-black text-green-400 p-8 text-center min-h-screen">
 <h1 class="text-4xl font-bold mb-8">☄️ COMET AI</h1>
 <div id="btc" class="text-3xl mb-4">BTC: Loading...</div>
 <div id="eth" class="text-3xl mb-8">ETH: Loading...</div>
-<button onclick="buyBTC()" class="bg-green-500 text-black px-8 py-4 rounded-full text-xl font-bold hover:bg-green-600">BUY BTC</button>
-<script>
-setInterval(async()=>{
-const res=await fetch('/prices');
-const data=await res.json();
-document.getElementById('btc').textContent=`BTC: $${data.BTC_USDT.toLocaleString()}`;
-document.getElementById('eth').textContent=`ETH: $${data.ETH_USDT.toLocaleString()}`;
-},2000);
-function buyBTC(){alert('🚀 BTC Order Placed!');}
-</script>
-</body>
-</html>
+<button onclick="buyBTC()" class="bg-green-500 text-black px-8 py-4 rounded-full text-xl font-bold">BUY BTC</button>
+<script>setInterval(async()=>{const res=await fetch('/prices');const data=await res.json();document.getElementById('btc').textContent=`BTC: $${data.BTC_USDT.toLocaleString()}`;document.getElementById('eth').textContent=`ETH: $${data.ETH_USDT.toLocaleString()}`;},2000);function buyBTC(){alert('🚀 BTC Order!');}</script>
+</body></html>""")
 """
     return HTMLResponse(content=html_content)
 
@@ -264,4 +262,4 @@ async def prices():
 
 # 🔥 RAILWAY START
 if __name__ == "__main__":
-uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8080)))
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
