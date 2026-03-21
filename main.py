@@ -10,16 +10,16 @@ from pydantic import BaseModel
 from typing import Optional
 import uvicorn
 
-# 🔥 RAILWAY PORT FIX
+#  RAILWAY PORT FIX
 PORT = int(os.getenv("PORT", 8000))
 
 app = FastAPI(
-    title="🚀 Comet AI Trading",
-    description="""🌠 Professional Crypto Exchange 
-✅ Real-time BTC/ETH Trading
-✅ Compound Interest Calculator  
-✅ Live Dashboard (2s updates)
-✅ KYC Protection""",
+    title=" Comet AI Trading",
+    description=""" Professional Crypto Exchange 
+ Real-time BTC/ETH Trading
+ Compound Interest Calculator  
+ Live Dashboard (2s updates)
+ KYC Protection""",
     version="2.0",
     docs_url="/docs",
     redoc_url="/redoc"
@@ -33,7 +33,7 @@ app.add_middleware(
 )
 @app.get("/")
 async def root():
-    return {"message": "🚀 Comet AI Trading LIVE!", "status": "success"}
+    return {"message": " Comet AI Trading LIVE!", "status": "success"}
 
 @app.get("/prices")
 async def prices():
@@ -45,7 +45,7 @@ async def mobile_dashboard():
 <!DOCTYPE html>
 <html><head><meta name="viewport" content="width=device-width"><script src="https://cdn.tailwindcss.com"></script><title>🚀 Comet AI</title></head>
 <body class="bg-black text-green-400 p-8 text-center min-h-screen">
-<h1 class="text-4xl font-bold mb-8">☄️ COMET AI</h1>
+<h1 class="text-4xl font-bold mb-8"> COMET AI</h1>
 <div id="btc" class="text-3xl mb-4">BTC: Loading...</div>
 <div id="eth" class="text-3xl mb-8">ETH: Loading...</div>
 <button onclick="buyBTC()" class="bg-green-500 text-black px-8 py-4 rounded-full text-xl font-bold">BUY BTC</button>
@@ -54,7 +54,7 @@ async def mobile_dashboard():
 """
     return HTMLResponse(content=html_content)
 
-# 🔥 CORS + PRODUCTION READY
+#  CORS + PRODUCTION READY
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -67,7 +67,7 @@ class UserCreate(BaseModel):
     email: str
     password: str
 
-# 🔥 REAL-TIME PRICES
+#  REAL-TIME PRICES
 current_prices = {"BTC_USDT": 65234.56, "ETH_USDT": 3487.23}
 
 def get_db():
@@ -76,7 +76,7 @@ def get_db():
     conn.execute("PRAGMA foreign_keys=ON")
     return conn
 
-# 🔥 COMPLETE DATABASE (အားလုံး တစ်ခါတည်း)
+#  COMPLETE DATABASE (အားလုံး တစ်ခါတည်း)
 @app.on_event("startup")
 def init_db():
     conn = get_db()
@@ -116,7 +116,7 @@ def init_db():
     conn.close()
     print("✅ ALL TABLES READY! Trading + KYC + Deposits")
 
-# 🔥 USER SYSTEM
+#  USER SYSTEM
 @app.post("/register")
 async def register(user: UserCreate):
     conn = get_db()
@@ -127,9 +127,9 @@ async def register(user: UserCreate):
         conn.execute("INSERT INTO users (email, password, role, kyc_status, wallet_usdt) VALUES (?, ?, ?, 'pending', 1000.0)",
                     (user.email, user.password, role))
         conn.commit()
-        return {"message": f"✅ User registered! Role: {role}"}
+        return {"message": f" User registered! Role: {role}"}
     except sqlite3.IntegrityError:
-        raise HTTPException(400, "❌ Email already exists")
+        raise HTTPException(400, " Email already exists")
     finally:
         conn.close()
 
@@ -140,10 +140,10 @@ async def login(user: UserCreate):
     conn.close()
     
     if db_user and db_user['password'] == user.password:
-        return {"message": "✅ Login successful!", "role": db_user['role'], "kyc_status": db_user['kyc_status']}
-    raise HTTPException(401, "❌ Invalid credentials")
+        return {"message": " Login successful!", "role": db_user['role'], "kyc_status": db_user['kyc_status']}
+    raise HTTPException(401, " Invalid credentials")
 
-# 🔥 TRADING SYSTEM
+#  TRADING SYSTEM
 @app.post("/trade/buy")
 async def buy_trade(email: str = Form(...), symbol: str = Form(...), amount_usdt: float = Form(...)):
     conn = get_db()
@@ -151,10 +151,10 @@ async def buy_trade(email: str = Form(...), symbol: str = Form(...), amount_usdt
     
     if user['kyc_status'] != 'verified':
         conn.close()
-        raise HTTPException(403, "❌ KYC verification required")
+        raise HTTPException(403, " KYC verification required")
     if user['wallet_usdt'] < amount_usdt:
         conn.close()
-        raise HTTPException(400, f"❌ Insufficient USDT: ${user['wallet_usdt']}")
+        raise HTTPException(400, f" Insufficient USDT: ${user['wallet_usdt']}")
     
     price = current_prices[f"{symbol}_USDT"]
     asset_amount = amount_usdt / price
@@ -167,7 +167,7 @@ async def buy_trade(email: str = Form(...), symbol: str = Form(...), amount_usdt
     
     conn.commit()
     conn.close()
-    return {"✅": f"Bought {asset_amount:.6f} {symbol}", "price": price}
+    return {"": f"Bought {asset_amount:.6f} {symbol}", "price": price}
 
 @app.post("/trade/sell")
 async def sell_trade(email: str = Form(...), symbol: str = Form(...), amount_asset: float = Form(...)):
@@ -176,17 +176,17 @@ async def sell_trade(email: str = Form(...), symbol: str = Form(...), amount_ass
     
     if user['kyc_status'] != 'verified':
         conn.close()
-        raise HTTPException(403, "❌ KYC required")
+        raise HTTPException(403, " KYC required")
     
     price = current_prices[f"{symbol}_USDT"]
     usdt_received = amount_asset * price
     
     if symbol == "BTC" and (user['wallet_btc'] or 0) < amount_asset:
         conn.close()
-        raise HTTPException(400, "❌ Insufficient BTC")
+        raise HTTPException(400, " Insufficient BTC")
     if symbol == "ETH" and (user['wallet_eth'] or 0) < amount_asset:
         conn.close()
-        raise HTTPException(400, "❌ Insufficient ETH")
+        raise HTTPException(400, " Insufficient ETH")
     
     conn.execute("UPDATE users SET wallet_usdt = wallet_usdt + ? WHERE email = ?", (usdt_received, email))
     if symbol == "BTC":
@@ -196,9 +196,9 @@ async def sell_trade(email: str = Form(...), symbol: str = Form(...), amount_ass
     
     conn.commit()
     conn.close()
-    return {"✅": f"Sold {amount_asset:.6f} {symbol}", "received": f"${usdt_received:.2f}"}
+    return {"": f"Sold {amount_asset:.6f} {symbol}", "received": f"${usdt_received:.2f}"}
 
-# 🔥 COMPOUND INTEREST
+#  COMPOUND INTEREST
 @app.get("/full-wallet/{email}")
 async def full_wallet(email: str):
     conn = get_db()
@@ -229,13 +229,13 @@ async def full_wallet(email: str):
         "compound_1yr": f"${compound_total:,.2f}"
     }
 
-# 🔥 LIVE DASHBOARD
+#  LIVE DASHBOARD
 @app.get("/live-dashboard")
 async def live_dashboard():
     return HTMLResponse("""
 <!DOCTYPE html>
 <html>
-<head><title>🚀 Comet AI Trading</title>
+<head><title> Comet AI Trading</title>
 <style>
 body{background:#000;color:#0f0;font-family:monospace;padding:50px;text-align:center;}
 .logo{font-size:3em;text-shadow:0 0 20px #0f0;animation:glow 2s infinite;}
@@ -243,7 +243,7 @@ body{background:#000;color:#0f0;font-family:monospace;padding:50px;text-align:ce
 .price{font-size:4em;margin:20px;}
 </style></head>
 <body>
-<div class="logo">☄️ COMET AI TRADING</div>
+<div class="logo"> COMET AI TRADING</div>
 <div class="price" id="btc">BTC: Loading...</div>
 <div class="price" id="eth">ETH: Loading...</div>
 <script>
@@ -260,6 +260,6 @@ document.getElementById('eth').textContent=`ETH: $${d.ETH_USDT}`;
 async def prices():
     return current_prices
 
-# 🔥 RAILWAY START
+#  RAILWAY START
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=PORT)
