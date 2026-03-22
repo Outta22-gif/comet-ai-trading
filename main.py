@@ -272,7 +272,7 @@ async def full_wallet(email: str):
 #  LIVE DASHBOARD - FIXED CSS
 @app.get("/live-dashboard")
 async def live_dashboard():
-    return HTMLResponse("""
+    return HTMLResponse """
 <!DOCTYPE html>
 <html>
 <head>
