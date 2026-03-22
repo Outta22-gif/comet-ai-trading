@@ -297,7 +297,7 @@ document.getElementById('eth').textContent=`ETH: $${d.ETH_USDT}`;
 });
 },2000);
 </script>
-</body></html>""")
+</body></html>"""
 
 @app.get("/prices")
 async def prices():
